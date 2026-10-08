@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EarnSphere Pro - Online Opportunities & Remote Work Hub</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              accent: '#06b6d4',
+              emerald: '#10b981',
+              dark: '#0B0F19',
+              card: '#111827',
+              border: '#1f2937'
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'spin-slow': 'spin 8s linear infinite',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #07090e;
+      color: #f3f4f6;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    .glass-nav {
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+      background: linear-gradient(135deg, rgba(23, 29, 45, 0.7) 0%, rgba(13, 17, 28, 0.9) 100%);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card:hover {
+      border-color: rgba(99, 102, 241, 0.45);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px -10px rgba(99, 102, 241, 0.15);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-indigo-600 selection:text-white">
+
+  <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/15 rounded-full blur-[120px]"></div>
+    <div class="absolute top-1/3 -right-40 w-[30rem] h-[30rem] bg-cyan-500/10 rounded-full blur-[140px]"></div>
+    <div class="absolute -bottom-32 left-1/3 w-96 h-96 bg-purple-600/10 rounded-full blur-[130px]"></div>
+  </div>
+
+  <header class="sticky top-0 z-40 glass-nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 p-[1px] shadow-lg shadow-indigo-500/20">
+          <div class="w-full h-full bg-[#0b0f19] rounded-[11px] flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-5 h-5 text-indigo-400"></i>
+          </div>
+        </div>
+        <div>
+          <span class="text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
+            EarnSphere <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-medium">PRO</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Quick Metrics & Auth Area -->
+      <div class="flex items-center gap-3">
+        <div id="userProfileBar" class="hidden items-center gap-3 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-slate-800">
+          <div class="flex flex-col text-right">
+            <span id="navUserName" class="text-xs font-semibold text-slate-200">Demo User</span>
+            <span class="text-[11px] font-mono text-emerald-400 font-medium flex items-center justify-end gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="navBalance">$148.60</span>
+            </span>
+          </div>
+          <div id="navUserAvatar" class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs ring-2 ring-indigo-500/30">
+            DU
+          </div>
+          <button onclick="handleLogout()" title="Sign Out" class="p-1 text-slate-400 hover:text-rose-400 transition-colors ml-1">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <button id="navLoginBtn" onclick="openLoginModal()" class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-md shadow-indigo-600/25 flex items-center gap-2">
+          <i data-lucide="user" class="w-4 h-4"></i>
+          <span>Sign In</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    <div class="text-center max-w-3xl mx-auto mb-10 pt-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-medium mb-4">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        100+ Verified Online Earning Opportunities & Micro-Work Streams
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+        Discover Verified <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-cyan-400">Digital Revenue</span> Streams
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        Browse authentic remote work, AI evaluation pools, micro-tasks, digital freelancing, and creative revenue models. Select any stream to verify quota availability and launch directly.
+      </p>
+
+      <!-- Quick Metrics Counters -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8">
+        <div class="bg-slate-900/60 border border-slate-800/80 p-3 rounded-2xl">
+          <div class="text-xl sm:text-2xl font-bold text-white">100+</div>
+          <div class="text-xs text-slate-400">Active Portals</div>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800/80 p-3 rounded-2xl">
+          <div class="text-xl sm:text-2xl font-bold text-emerald-400">$3.8M+</div>
+          <div class="text-xs text-slate-400">Ecosystem Payouts</div>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800/80 p-3 rounded-2xl">
+          <div class="text-xl sm:text-2xl font-bold text-cyan-400">99.4%</div>
+          <div class="text-xs text-slate-400">Verification Rate</div>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800/80 p-3 rounded-2xl">
+          <div class="text-xl sm:text-2xl font-bold text-indigo-400">Global</div>
+          <div class="text-xs text-slate-400">Eligibility</div>
+        </div>
+      </div>
+    </div>
+
+    <section class="mb-8 space-y-4">
+      <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
+        <!-- Search bar -->
+        <div class="relative w-full md:w-96">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search platform, e.g. 'Amazon', 'AI', 'Writing'..." 
+            class="w-full bg-slate-900/90 border border-slate-800 pl-10 pr-4 py-2.5 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+            oninput="handleSearch()"
+          />
+        </div>
+
+        <!-- Sorting selector -->
+        <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+          <span class="text-xs text-slate-400 whitespace-nowrap">Sort By:</span>
+          <select id="sortSelect" onchange="handleSort()" class="bg-slate-900/90 border border-slate-800 text-xs text-slate-200 py-2 px-3 rounded-xl focus:outline-none focus:border-indigo-500">
+            <option value="featured">Featured Order</option>
+            <option value="pay-high">Highest Earning Rate</option>
+            <option value="rating">Top Rated</option>
+            <option value="name">Alphabetical (A-Z)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Categories Pills Horizontal Scroller -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar -mx-2 px-2" id="categoriesContainer">
+        <!-- Category buttons dynamically loaded or injected -->
+      </div>
+    </section>
+
+    <!-- Opportunity Counter -->
+    <div class="flex items-center justify-between text-xs text-slate-400 mb-4 px-1">
+      <span id="resultsCount">Showing 100+ Opportunities</span>
+      <span class="flex items-center gap-1"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> All portals direct verified</span>
+    </div>
+
+    <div id="opportunitiesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <!-- Cards rendered via JS -->
+    </div>
+
+    <div id="noResults" class="hidden py-16 text-center">
+      <div class="w-16 h-16 rounded-2xl bg-slate-800/80 flex items-center justify-center mx-auto mb-3 text-slate-500">
+        <i data-lucide="search-x" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-base font-semibold text-slate-300">No opportunities match your filter</h3>
+      <p class="text-xs text-slate-500 mt-1">Try tweaking your search term or select "All Categories".</p>
+      <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-indigo-600/20 text-indigo-400 rounded-xl text-xs hover:bg-indigo-600/30 transition-colors">
+        Clear All Filters
+      </button>
+    </div>
+  </main>
+
+  <div id="loginModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl shadow-2xl p-6 relative animate-in fade-in zoom-in duration-200">
+      <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-1">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="lock" class="w-6 h-6"></i>
+        </div>
+        <h2 class="text-xl font-bold text-white">Access Member Portal</h2>
+        <p class="text-xs text-slate-400 mt-1">Sign in to track task allocations and withdraw earned balances</p>
+      </div>
+
+      <!-- Social login options -->
+      <div class="space-y-3">
+        <button onclick="authenticateDemo('Google', 'google')" class="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-750 border border-slate-700/80 rounded-xl text-sm font-medium text-slate-200 flex items-center justify-center gap-3 transition-colors">
+          <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.8 0-1.2.2-2.1.4-2.8L1.9 6.3C.7 8.7 0 10.3 0 12s.7 3.3 1.9 5.7l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16c1.8 3.7 5.6 7 10.1 7z"/></svg>
+          Continue with Google
+        </button>
+
+        <button onclick="authenticateDemo('Facebook', 'facebook')" class="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-750 border border-slate-700/80 rounded-xl text-sm font-medium text-slate-200 flex items-center justify-center gap-3 transition-colors">
+          <svg class="w-4 h-4 text-blue-500 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Continue with Facebook
+        </button>
+
+        <button onclick="authenticateDemo('Twitter / X', 'twitter')" class="w-full py-2.5 px-4 bg-slate-800 hover:bg-slate-750 border border-slate-700/80 rounded-xl text-sm font-medium text-slate-200 flex items-center justify-center gap-3 transition-colors">
+          <svg class="w-4 h-4 text-slate-200 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Continue with X (Twitter)
+        </button>
+      </div>
+
+      <div class="relative my-4 flex items-center justify-center">
+        <div class="border-t border-slate-800 w-full"></div>
+        <span class="bg-slate-900 px-3 text-[11px] text-slate-500 uppercase font-semibold tracking-wider">Or Email Demo</span>
+      </div>
+
+      <form onsubmit="handleEmailDemoLogin(event)" class="space-y-3">
+        <div>
+          <input type="email" id="demoEmailInput" required placeholder="demo.worker@earnhub.net" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+        </div>
+        <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition-colors">
+          Instant One-Click Login
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="flowModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl p-6 sm:p-8 relative">
+
+      <!-- Active Loading State -->
+      <div id="modalLoadingState" class="space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+          <div class="flex items-center gap-3">
+            <div id="flowPlatformIcon" class="w-10 h-10 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center font-bold">
+              <i data-lucide="cpu" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 id="flowPlatformTitle" class="text-base font-bold text-white">Platform Allocation</h3>
+              <p id="flowPlatformPay" class="text-xs text-emerald-400 font-mono">$25 - $40 / hr</p>
+            </div>
+          </div>
+          <span class="text-[11px] px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono font-medium animate-pulse">
+            DISPATCHING
+          </span>
+        </div>
+
+        <!-- Animated Progress Meter -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span id="loadingStepStatus" class="text-slate-300 font-medium flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-indigo-500 animate-ping"></span>
+              Initializing gateway socket...
+            </span>
+            <span id="loadingPercent" class="text-indigo-400 font-mono font-semibold">0%</span>
+          </div>
+
+          <div class="w-full bg-slate-800 rounded-full h-3 p-0.5 overflow-hidden">
+            <div id="loadingBarFill" class="bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 h-full rounded-full transition-all duration-300 w-0"></div>
+          </div>
+
+          <div class="flex justify-between text-[11px] text-slate-500 font-mono">
+            <span>Elapsed: <strong id="elapsedTimer" class="text-slate-400">0s</strong></span>
+            <span>Target: 60s Session Timeout</span>
+          </div>
+        </div>
+
+        <!-- Simulated technical diagnostic log -->
+        <div class="bg-black/60 border border-slate-800 rounded-xl p-3 font-mono text-[11px] text-slate-400 space-y-1 max-h-24 overflow-y-auto custom-scrollbar" id="terminalLogs">
+          <div class="text-emerald-400">> Handshake requested with task server...</div>
+        </div>
+
+        <!-- Controls: Cancel or Fast-forward -->
+        <div class="flex items-center justify-between pt-2">
+          <button onclick="abortFlow()" class="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors">
+            Cancel Request
+          </button>
+          <button onclick="fastForwardFlow()" class="px-3.5 py-2 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-indigo-300 rounded-xl border border-indigo-500/30 transition-colors flex items-center gap-1.5" title="Instantly fast forward to 60s">
+            <i data-lucide="fast-forward" class="w-3.5 h-3.5"></i>
+            Fast-Forward (60s)
+          </button>
+        </div>
+      </div>
+
+      <div id="modalErrorState" class="hidden text-center space-y-5 py-2">
+        <div class="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-500 flex items-center justify-center mx-auto animate-bounce">
+          <i data-lucide="wifi-off" class="w-8 h-8"></i>
+        </div>
+
+        <div>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-rose-500/15 text-rose-400 uppercase tracking-wider font-mono">
+            HTTP 504 Gateway Timeout
+          </span>
+          <h3 class="text-xl font-bold text-white mt-3">Internet Connection Lost or Unstable</h3>
+          <p class="text-sm text-slate-400 mt-2 max-w-sm mx-auto leading-relaxed">
+            The remote dispatch node timed out after 60 seconds without packet acknowledgment. Please check your network connection and try again later.
+          </p>
+        </div>
+
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 text-left font-mono text-[11px] text-slate-400 space-y-1">
+          <div class="text-rose-400 font-semibold">[DIAGNOSTIC_ERR_NET_UNREACHABLE]</div>
+          <div>Remote Node: 198.51.100.82:443 (ACK_LOST)</div>
+          <div>Latency: &gt; 60,000 ms (Session Expired)</div>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <button onclick="retryFlow()" class="flex-1 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            Try Again
+          </button>
+          <button onclick="closeFlowModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold transition-colors">
+            Dismiss
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <footer class="border-t border-slate-900 bg-slate-950/60 py-8 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2 text-slate-400 font-medium">
+        <i data-lucide="globe" class="w-4 h-4 text-indigo-400"></i>
+        EarnSphere Directory &copy; 2026. All remote earning tracks verified.
+      </div>
+      <div class="flex gap-4 text-slate-500">
+        <span>TLS 256-Bit Encrypted</span>
+        <span>&bull;</span>
+        <span>Independent Job Aggregator</span>
+        <span>&bull;</span>
+        <button onclick="showToast('Diagnostic systems operational', 'info')" class="hover:underline">System Status: OK</button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* Opportunities Dataset containing 105+ unique realistic platforms across 8 categories */
+    const categories = [
+      { id: 'all', label: 'All Opportunities', icon: 'layers' },
+      { id: 'micro', label: 'Micro Tasks', icon: 'check-square' },
+      { id: 'ai', label: 'AI & Data Annotation', icon: 'bot' },
+      { id: 'freelance', label: 'Freelancing & Dev', icon: 'code-2' },
+      { id: 'creative', label: 'Creative & Media', icon: 'palette' },
+      { id: 'transcription', label: 'Audio & Translation', icon: 'headphones' },
+      { id: 'testing', label: 'App & Usability Testing', icon: 'smartphone' },
+      { id: 'surveys', label: 'Market Research', icon: 'clipboard-list' },
+      { id: 'education', label: 'Tutoring & Writing', icon: 'book-open' }
+    ];
+
+    const rawOpportunities = [
+      // AI & Data Annotation (14 items)
+      { name: "Remotasks AI Evaluator", cat: "ai", pay: "$18 - $35/hr", diff: "Easy", rating: 4.8, badge: "Popular" },
+      { name: "Scale AI Data Rater", cat: "ai", pay: "$22 - $45/hr", diff: "Medium", rating: 4.9, badge: "Hot" },
+      { name: "Outlier.ai Specialist", cat: "ai", pay: "$30 - $60/hr", diff: "Hard", rating: 4.7, badge: "High Pay" },
+      { name: "Appen Global Data Annotator", cat: "ai", pay: "$14 - $24/hr", diff: "Easy", rating: 4.5, badge: "Global" },
+      { name: "Alignerr Language Model Trainer", cat: "ai", pay: "$25 - $40/hr", diff: "Medium", rating: 4.6, badge: "New" },
+      { name: "DataAnnotation.tech Coding Evaluator", cat: "ai", pay: "$40 - $65/hr", diff: "Hard", rating: 4.9, badge: "Verified" },
+      { name: "Invisible Technologies Advanced Operator", cat: "ai", pay: "$20 - $35/hr", diff: "Medium", rating: 4.6, badge: "Remote" },
+      { name: "Mindrift AI Writer & Editor", cat: "ai", pay: "$18 - $28/hr", diff: "Medium", rating: 4.4, badge: "Flexible" },
+      { name: "OneForma AI Engine Trainer", cat: "ai", pay: "$12 - $22/hr", diff: "Easy", rating: 4.3, badge: "Verified" },
+      { name: "Toloka AI Data Validator", cat: "ai", pay: "$10 - $18/hr", diff: "Easy", rating: 4.2, badge: "Instant Pay" },
+      { name: "Lionbridge AI Solution Tester", cat: "ai", pay: "$15 - $25/hr", diff: "Medium", rating: 4.5, badge: "Global" },
+      { name: "Defined.ai Voice & Vision Tagging", cat: "ai", pay: "$16 - $26/hr", diff: "Easy", rating: 4.4, badge: "Active" },
+      { name: "Clickworker UHRS Judge", cat: "ai", pay: "$12 - $20/hr", diff: "Easy", rating: 4.6, badge: "Popular" },
+      { name: "CloudFactory Cloud Annotation", cat: "ai", pay: "$14 - $22/hr", diff: "Medium", rating: 4.3, badge: "Verified" },
+
+      // Micro Tasks (13 items)
+      { name: "Amazon Mechanical Turk (MTurk)", cat: "micro", pay: "$8 - $16/hr", diff: "Easy", rating: 4.4, badge: "Classic" },
+      { name: "Picoworkers Digital Microgigs", cat: "micro", pay: "$6 - $14/hr", diff: "Easy", rating: 4.1, badge: "Fast" },
+      { name: "Microworkers Small Tasks Hub", cat: "micro", pay: "$7 - $15/hr", diff: "Easy", rating: 4.2, badge: "Global" },
+      { name: "SproutGigs Micro Job Network", cat: "micro", pay: "$8 - $17/hr", diff: "Easy", rating: 4.3, badge: "Popular" },
+      { name: "ySense Global Task Board", cat: "micro", pay: "$6 - $13/hr", diff: "Easy", rating: 4.1, badge: "Verified" },
+      { name: "RapidWorkers Crowd Assistant", cat: "micro", pay: "$5 - $12/hr", diff: "Easy", rating: 3.9, badge: "Active" },
+      { name: "Hive Work Micro Identifier", cat: "micro", pay: "$7 - $14/hr", diff: "Easy", rating: 4.2, badge: "Instant" },
+      { name: "JumpTask Web3 Micro Tasks", cat: "micro", pay: "$8 - $16/hr", diff: "Easy", rating: 4.4, badge: "Crypto" },
+      { name: "TimeBucks Rewards Matrix", cat: "micro", pay: "$5 - $11/hr", diff: "Easy", rating: 4.0, badge: "Global" },
+      { name: "Freelancer.com Micro Contests", cat: "micro", pay: "$15 - $30/hr", diff: "Medium", rating: 4.3, badge: "Contests" },
+      { name: "TaskRabbit Home & Office Remote Assisting", cat: "micro", pay: "$25 - $50/hr", diff: "Medium", rating: 4.7, badge: "Top Tier" },
+      { name: "Premise Local & Web Explorer", cat: "micro", pay: "$9 - $18/hr", diff: "Easy", rating: 4.3, badge: "Mobile" },
+      { name: "Fancy Hands Virtual Support Tasks", cat: "micro", pay: "$12 - $20/hr", diff: "Medium", rating: 4.2, badge: "Verified" },
+
+      // Usability & App Testing (13 items)
+      { name: "UserTesting Live Website Reviewer", cat: "testing", pay: "$30 - $60/hr", diff: "Easy", rating: 4.9, badge: "High Pay" },
+      { name: "Testbirds UX Bug & Feature Finder", cat: "testing", pay: "$20 - $35/hr", diff: "Medium", rating: 4.6, badge: "Verified" },
+      { name: "uTest Professional Software Tester", cat: "testing", pay: "$25 - $55/hr", diff: "Hard", rating: 4.8, badge: "Pro" },
+      { name: "Trymata (TryMyUI) Usability Tester", cat: "testing", pay: "$18 - $30/hr", diff: "Easy", rating: 4.4, badge: "Fast Pay" },
+      { name: "Userlytics Multi-Platform Reviewer", cat: "testing", pay: "$20 - $40/hr", diff: "Easy", rating: 4.5, badge: "Global" },
+      { name: "IntelliZoom Panel Participant", cat: "testing", pay: "$15 - $30/hr", diff: "Easy", rating: 4.3, badge: "Active" },
+      { name: "BetaTesting Pre-Release Reviewer", cat: "testing", pay: "$20 - $45/hr", diff: "Medium", rating: 4.5, badge: "Featured" },
+      { name: "Userfeel Usability Audits", cat: "testing", pay: "$18 - $32/hr", diff: "Easy", rating: 4.4, badge: "Verified" },
+      { name: "Validately User Insight Tester", cat: "testing", pay: "$25 - $45/hr", diff: "Medium", rating: 4.6, badge: "Popular" },
+      { name: "PlaytestCloud Mobile Game Tester", cat: "testing", pay: "$15 - $30/hr", diff: "Easy", rating: 4.8, badge: "Gaming" },
+      { name: "Checkealos Mobile UX Evaluator", cat: "testing", pay: "$16 - $28/hr", diff: "Easy", rating: 4.2, badge: "Global" },
+      { name: "Ferpection UX Research Specialist", cat: "testing", pay: "$20 - $35/hr", diff: "Medium", rating: 4.3, badge: "Verified" },
+      { name: "Testlio Freelance QA Network", cat: "testing", pay: "$28 - $50/hr", diff: "Hard", rating: 4.7, badge: "Pro QA" },
+
+      // Audio & Transcription (13 items)
+      { name: "Rev Audio & Video Transcriber", cat: "transcription", pay: "$15 - $32/hr", diff: "Medium", rating: 4.7, badge: "Top Choice" },
+      { name: "TranscribeMe Quick Audio Typist", cat: "transcription", pay: "$14 - $26/hr", diff: "Easy", rating: 4.4, badge: "Beginner" },
+      { name: "GoTranscript Multilingual Audio Editor", cat: "transcription", pay: "$16 - $30/hr", diff: "Medium", rating: 4.5, badge: "Global" },
+      { name: "Scribie Clean Speech Typist", cat: "transcription", pay: "$10 - $20/hr", diff: "Easy", rating: 4.2, badge: "Active" },
+      { name: "Speechpad Video Captioner", cat: "transcription", pay: "$15 - $30/hr", diff: "Medium", rating: 4.5, badge: "Fast Pay" },
+      { name: "Gengo Human Language Translator", cat: "transcription", pay: "$20 - $45/hr", diff: "Hard", rating: 4.6, badge: "Verified" },
+      { name: "Unbabel Machine Output Editor", cat: "transcription", pay: "$18 - $34/hr", diff: "Medium", rating: 4.4, badge: "Flexible" },
+      { name: "CastingWords Transcription Pod", cat: "transcription", pay: "$11 - $22/hr", diff: "Easy", rating: 4.1, badge: "Verified" },
+      { name: "Bunny Studio Voice Artist & Translator", cat: "transcription", pay: "$35 - $80/hr", diff: "Hard", rating: 4.8, badge: "High Pay" },
+      { name: "Voices.com Commercial Voiceover", cat: "transcription", pay: "$40 - $120/hr", diff: "Hard", rating: 4.9, badge: "Premium" },
+      { name: "Voice123 Voice Narration", cat: "transcription", pay: "$35 - $90/hr", diff: "Hard", rating: 4.7, badge: "Pro" },
+      { name: "Translated.com Remote Linguist", cat: "transcription", pay: "$22 - $40/hr", diff: "Medium", rating: 4.5, badge: "Global" },
+      { name: "ProZ Translation Specialist Hub", cat: "transcription", pay: "$25 - $55/hr", diff: "Hard", rating: 4.6, badge: "B2B" },
+
+      // Freelancing & Development (14 items)
+      { name: "Upwork Remote Software Developer", cat: "freelance", pay: "$40 - $95/hr", diff: "Hard", rating: 4.9, badge: "Top Platform" },
+      { name: "Fiverr Pro Web Designer", cat: "freelance", pay: "$30 - $75/hr", diff: "Medium", rating: 4.8, badge: "Popular" },
+      { name: "Toptal Elite Engineering Guild", cat: "freelance", pay: "$60 - $130/hr", diff: "Hard", rating: 4.9, badge: "Elite 3%" },
+      { name: "Codeable WordPress Specialist", cat: "freelance", pay: "$50 - $90/hr", diff: "Hard", rating: 4.8, badge: "Exclusive" },
+      { name: "Guru Technical Copy & Code", cat: "freelance", pay: "$25 - $50/hr", diff: "Medium", rating: 4.3, badge: "Verified" },
+      { name: "PeoplePerHour Digital Contractor", cat: "freelance", pay: "$22 - $48/hr", diff: "Medium", rating: 4.4, badge: "UK/Global" },
+      { name: "Topcoder Algorithm Competitor", cat: "freelance", pay: "$35 - $85/hr", diff: "Hard", rating: 4.7, badge: "Prizes" },
+      { name: "Gun.io Senior Software Engineer", cat: "freelance", pay: "$70 - $140/hr", diff: "Hard", rating: 4.9, badge: "High Pay" },
+      { name: "Freelancer.com Project Bidder", cat: "freelance", pay: "$20 - $45/hr", diff: "Medium", rating: 4.2, badge: "Popular" },
+      { name: "Arc.dev Global Remote Engineer", cat: "freelance", pay: "$55 - $110/hr", diff: "Hard", rating: 4.8, badge: "Full-Time" },
+      { name: "Lemon.io Startup Developer Pool", cat: "freelance", pay: "$45 - $85/hr", diff: "Hard", rating: 4.7, badge: "Vetted" },
+      { name: "MarketerHire On-Demand Growth Lead", cat: "freelance", pay: "$50 - $100/hr", diff: "Hard", rating: 4.8, badge: "Marketing" },
+      { name: "Contra Independent Freelancer", cat: "freelance", pay: "$30 - $70/hr", diff: "Medium", rating: 4.6, badge: "Zero Fee" },
+      { name: "ServiceScape Editing & Translation", cat: "freelance", pay: "$25 - $45/hr", diff: "Medium", rating: 4.4, badge: "Verified" },
+
+      // Creative & Stock Media (13 items)
+      { name: "Shutterstock Vector & Photo Contributor", cat: "creative", pay: "$15 - $40/hr", diff: "Easy", rating: 4.6, badge: "Passive" },
+      { name: "Adobe Stock 3D & Asset Producer", cat: "creative", pay: "$20 - $55/hr", diff: "Medium", rating: 4.8, badge: "High Yield" },
+      { name: "Envato Elements Digital Templates", cat: "creative", pay: "$25 - $60/hr", diff: "Medium", rating: 4.7, badge: "Author Pool" },
+      { name: "Freesound Sound Effects Designer", cat: "creative", pay: "$12 - $30/hr", diff: "Medium", rating: 4.2, badge: "Audio" },
+      { name: "Canva Template Designer Creator", cat: "creative", pay: "$18 - $45/hr", diff: "Easy", rating: 4.7, badge: "Trending" },
+      { name: "Creative Market UI Kit Publisher", cat: "creative", pay: "$30 - $70/hr", diff: "Medium", rating: 4.8, badge: "Royalties" },
+      { name: "Pond5 Footage & Drone Videographer", cat: "creative", pay: "$25 - $65/hr", diff: "Medium", rating: 4.5, badge: "4K Media" },
+      { name: "Teepublic Graphic Merchandise Designer", cat: "creative", pay: "$10 - $25/hr", diff: "Easy", rating: 4.3, badge: "Print On Demand" },
+      { name: "Redbubble Apparel Illustration Store", cat: "creative", pay: "$12 - $28/hr", diff: "Easy", rating: 4.4, badge: "Popular" },
+      { name: "Dribbble Freelance Illustrator", cat: "creative", pay: "$35 - $80/hr", diff: "Hard", rating: 4.8, badge: "Pro" },
+      { name: "ArtStation Digital Concept Seller", cat: "creative", pay: "$30 - $75/hr", diff: "Hard", rating: 4.9, badge: "3D/Games" },
+      { name: "Sketchfab 3D Asset Modeler", cat: "creative", pay: "$25 - $60/hr", diff: "Hard", rating: 4.7, badge: "VR/AR" },
+      { name: "Motion Array Video Plugin Maker", cat: "creative", pay: "$30 - $70/hr", diff: "Hard", rating: 4.6, badge: "Royalties" },
+
+      // Market Research & Surveys (13 items)
+      { name: "Prolific Academic Research Participant", cat: "surveys", pay: "$12 - $24/hr", diff: "Easy", rating: 4.9, badge: "Top Rated" },
+      { name: "YouGov Opinion Polling Panel", cat: "surveys", pay: "$8 - $16/hr", diff: "Easy", rating: 4.6, badge: "Official" },
+      { name: "Swagbucks Consumer Rewards", cat: "surveys", pay: "$5 - $12/hr", diff: "Easy", rating: 4.2, badge: "Points" },
+      { name: "Pinecone Research Exclusive Studies", cat: "surveys", pay: "$15 - $28/hr", diff: "Easy", rating: 4.8, badge: "$3 Fixed/Survey" },
+      { name: "Branded Surveys Community Member", cat: "surveys", pay: "$7 - $15/hr", diff: "Easy", rating: 4.3, badge: "Fast Cash" },
+      { name: "Toluna Influencer Survey Hub", cat: "surveys", pay: "$6 - $14/hr", diff: "Easy", rating: 4.1, badge: "Global" },
+      { name: "InboxDollars Verified Panelist", cat: "surveys", pay: "$5 - $12/hr", diff: "Easy", rating: 4.2, badge: "$5 Bonus" },
+      { name: "Respondent.io Professional Focus Group", cat: "surveys", pay: "$75 - $180/hr", diff: "Medium", rating: 4.9, badge: "Huge Pay" },
+      { name: "User Interviews Research Studies", cat: "surveys", pay: "$60 - $150/hr", diff: "Medium", rating: 4.9, badge: "Top Tier" },
+      { name: "PrizeRebel Opinion Rewards", cat: "surveys", pay: "$6 - $13/hr", diff: "Easy", rating: 4.3, badge: "Instant Gift" },
+      { name: "Ipsos iSay Market Insights", cat: "surveys", pay: "$7 - $15/hr", diff: "Easy", rating: 4.4, badge: "Verified" },
+      { name: "Survey Junkie Feedback Panel", cat: "surveys", pay: "$6 - $14/hr", diff: "Easy", rating: 4.3, badge: "Popular" },
+      { name: "LifePoints Global Research Pool", cat: "surveys", pay: "$7 - $13/hr", diff: "Easy", rating: 4.1, badge: "Global" },
+
+      // Education & Writing (13 items)
+      { name: "Preply Online Language Tutor", cat: "education", pay: "$20 - $45/hr", diff: "Medium", rating: 4.8, badge: "Global" },
+      { name: "Cambly English Conversation Coach", cat: "education", pay: "$12 - $20/hr", diff: "Easy", rating: 4.6, badge: "No Degree Req" },
+      { name: "iTalki Foreign Language Instructor", cat: "education", pay: "$18 - $40/hr", diff: "Medium", rating: 4.8, badge: "Top Choice" },
+      { name: "Medium Partner Program Author", cat: "education", pay: "$15 - $50/hr", diff: "Medium", rating: 4.5, badge: "Articles" },
+      { name: "Substack Newsletter Publisher", cat: "education", pay: "$25 - $90/hr", diff: "Hard", rating: 4.7, badge: "Subscribers" },
+      { name: "Textbroker Written Content Creator", cat: "education", pay: "$12 - $26/hr", diff: "Easy", rating: 4.1, badge: "Fast Accept" },
+      { name: "WriterAccess SEO Article Producer", cat: "education", pay: "$25 - $55/hr", diff: "Medium", rating: 4.7, badge: "Vetted" },
+      { name: "Wyzant Academic Online Instructor", cat: "education", pay: "$30 - $70/hr", diff: "Hard", rating: 4.8, badge: "High Rate" },
+      { name: "Chegg Q&A Academic Expert", cat: "education", pay: "$15 - $32/hr", diff: "Hard", rating: 4.3, badge: "STEM Focus" },
+      { name: "Course Hero Educational Contributor", cat: "education", pay: "$14 - $28/hr", diff: "Medium", rating: 4.2, badge: "Active" },
+      { name: "Outschool K-12 Interactive Teacher", cat: "education", pay: "$35 - $75/hr", diff: "Medium", rating: 4.8, badge: "High Pay" },
+      { name: "Remind Tutoring Remote Specialist", cat: "education", pay: "$22 - $42/hr", diff: "Medium", rating: 4.5, badge: "Verified" },
+      { name: "Scripted Tech & Marketing Writer", cat: "education", pay: "$30 - $65/hr", diff: "Hard", rating: 4.6, badge: "B2B Articles" }
+    ];
+
+    /* Dynamic duplication to ensure robust 105+ count with unique IDs */
+    const opportunities = rawOpportunities.map((item, idx) => ({
+      id: idx + 1,
+      ...item
+    }));
+
+    /* State variables */
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let currentSort = 'featured';
+    let activeOpportunity = null;
+    let loadingTimer = null;
+    let elapsedSeconds = 0;
+    const TOTAL_FLOW_SECONDS = 60;
+
+    let userState = {
+      isLoggedIn: false,
+      name: '',
+      provider: '',
+      balance: '$124.50'
+    };
+
+    function renderCategoryPills() {
+      const container = document.getElementById('categoriesContainer');
+      container.innerHTML = categories.map(cat => {
+        const isActive = cat.id === currentCategory;
+        return `
+          <button 
+            onclick="setCategory('${cat.id}')"
+            class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-200 ${
+              isActive 
+                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30 border border-indigo-500' 
+                : 'bg-slate-900/90 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700'
+            }"
+          >
+            <i data-lucide="${cat.icon}" class="w-3.5 h-3.5"></i>
+            <span>${cat.label}</span>
+          </button>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function setCategory(catId) {
+      currentCategory = catId;
+      renderCategoryPills();
+      renderCards();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+      renderCards();
+    }
+
+    function handleSort() {
+      currentSort = document.getElementById('sortSelect').value;
+      renderCards();
+    }
+
+    function resetFilters() {
+      currentCategory = 'all';
+      searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('sortSelect').value = 'featured';
+      currentSort = 'featured';
+      renderCategoryPills();
+      renderCards();
+    }
+
+    function renderCards() {
+      let filtered = opportunities.filter(item => {
+        const matchesCategory = currentCategory === 'all' || item.cat === currentCategory;
+        const matchesSearch = item.name.toLowerCase().includes(searchQuery) || 
+                              item.pay.toLowerCase().includes(searchQuery) ||
+                              item.badge.toLowerCase().includes(searchQuery);
+        return matchesCategory && matchesSearch;
+      });
+
+      // Sorting
+      if (currentSort === 'pay-high') {
+        filtered.sort((a, b) => {
+          const numA = parseInt(a.pay.replace(/[^0-9]/g, '')) || 0;
+          const numB = parseInt(b.pay.replace(/[^0-9]/g, '')) || 0;
+          return numB - numA;
+        });
+      } else if (currentSort === 'rating') {
+        filtered.sort((a, b) => b.rating - a.rating);
+      } else if (currentSort === 'name') {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      }
+
+      const grid = document.getElementById('opportunitiesGrid');
+      const noResults = document.getElementById('noResults');
+      const resultsCount = document.getElementById('resultsCount');
+
+      resultsCount.textContent = `Showing ${filtered.length} of ${opportunities.length} Opportunities`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        noResults.classList.remove('hidden');
+        return;
+      }
+
+      noResults.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(item => {
+        const diffColor = item.diff === 'Easy' ? 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20' :
+                          item.diff === 'Medium' ? 'text-amber-400 bg-amber-400/10 border-amber-400/20' :
+                          'text-purple-400 bg-purple-400/10 border-purple-400/20';
+
+        return `
+          <div class="glass-card rounded-2xl p-4 flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="text-[11px] font-mono px-2 py-0.5 rounded-md border ${diffColor}">
+                  ${item.diff}
+                </span>
+                <span class="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/60 font-medium">
+                  ${item.badge}
+                </span>
+              </div>
+
+              <h4 class="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors line-clamp-1 mb-1">
+                ${item.name}
+              </h4>
+
+              <div class="flex items-center gap-2 text-xs text-slate-400 mb-4">
+                <div class="flex items-center text-amber-400">
+                  <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                  <span class="ml-1 text-xs font-semibold text-slate-200">${item.rating}</span>
+                </div>
+                <span>&bull;</span>
+                <span class="capitalize text-slate-400">${item.cat}</span>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800/80 mt-auto">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-[11px] text-slate-400">Yield:</span>
+                <span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-800/40">
+                  ${item.pay}
+                </span>
+              </div>
+
+              <button 
+                onclick="initiateOpportunityFlow(${item.id})"
+                class="w-full py-2 bg-indigo-600/90 hover:bg-indigo-600 text-white font-medium text-xs rounded-xl transition-all shadow-md shadow-indigo-600/20 flex items-center justify-center gap-1.5 group-hover:shadow-indigo-600/35 active:scale-95"
+              >
+                <span>Access Portal</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function initiateOpportunityFlow(id) {
+      activeOpportunity = opportunities.find(o => o.id === id);
+      if (!activeOpportunity) return;
+
+      // Reset modal view
+      document.getElementById('modalLoadingState').classList.remove('hidden');
+      document.getElementById('modalErrorState').classList.add('hidden');
+
+      // Populate info
+      document.getElementById('flowPlatformTitle').textContent = activeOpportunity.name;
+      document.getElementById('flowPlatformPay').textContent = activeOpportunity.pay;
+      
+      const modal = document.getElementById('flowModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      startLoadingProgress();
+    }
+
+    function startLoadingProgress() {
+      clearInterval(loadingTimer);
+      elapsedSeconds = 0;
+      updateLoadingUI(0);
+
+      const terminal = document.getElementById('terminalLogs');
+      terminal.innerHTML = `<div class="text-emerald-400">> [INIT] Handshake socket dispatched for ${activeOpportunity.name}...</div>`;
+
+      loadingTimer = setInterval(() => {
+        elapsedSeconds++;
+        updateLoadingUI(elapsedSeconds);
+
+        if (elapsedSeconds >= TOTAL_FLOW_SECONDS) {
+          clearInterval(loadingTimer);
+          showNetworkTimeoutError();
+        }
+      }, 1000);
+    }
+
+    function updateLoadingUI(secs) {
+      const percentage = Math.min(Math.round((secs / TOTAL_FLOW_SECONDS) * 100), 100);
+      document.getElementById('loadingPercent').textContent = `${percentage}%`;
+      document.getElementById('loadingBarFill').style.width = `${percentage}%`;
+      document.getElementById('elapsedTimer').textContent = `${secs}s`;
+
+      const statusEl = document.getElementById('loadingStepStatus');
+      const terminal = document.getElementById('terminalLogs');
+
+      if (secs < 12) {
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-indigo-500 animate-ping"></span> Negotiating TLS cipher suites with node...`;
+        if (secs === 5) appendTerminalLog("Validating user session token & IP safety hash...");
+      } else if (secs < 25) {
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-purple-500 animate-ping"></span> Querying remote task availability pool...`;
+        if (secs === 18) appendTerminalLog("Allocating worker thread queue ID: #TQ-9942...");
+      } else if (secs < 42) {
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-cyan-500 animate-ping"></span> Syncing credential checksum with host server...`;
+        if (secs === 32) appendTerminalLog("Keep-alive packet #3 forwarded. Awaiting cluster clearance...");
+      } else if (secs < 58) {
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> Warning: Remote gateway latency exceeds 4,500ms...`;
+        if (secs === 48) appendTerminalLog("<span class='text-amber-400'>[WARN] Packet drop detected. Retrying gateway connection...</span>");
+      }
+    }
+
+    function appendTerminalLog(msg) {
+      const terminal = document.getElementById('terminalLogs');
+      const div = document.createElement('div');
+      div.innerHTML = `> ${msg}`;
+      terminal.appendChild(div);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function fastForwardFlow() {
+      if (elapsedSeconds < TOTAL_FLOW_SECONDS) {
+        elapsedSeconds = TOTAL_FLOW_SECONDS;
+        updateLoadingUI(60);
+        clearInterval(loadingTimer);
+        setTimeout(showNetworkTimeoutError, 300);
+      }
+    }
+
+    function abortFlow() {
+      clearInterval(loadingTimer);
+      closeFlowModal();
+      showToast('Session request cancelled by user', 'info');
+    }
+
+    function showNetworkTimeoutError() {
+      document.getElementById('modalLoadingState').classList.add('hidden');
+      document.getElementById('modalErrorState').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function retryFlow() {
+      document.getElementById('modalErrorState').classList.add('hidden');
+      document.getElementById('modalLoadingState').classList.remove('hidden');
+      startLoadingProgress();
+    }
+
+    function closeFlowModal() {
+      clearInterval(loadingTimer);
+      const modal = document.getElementById('flowModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function openLoginModal() {
+      document.getElementById('loginModal').classList.remove('hidden');
+      document.getElementById('loginModal').classList.add('flex');
+    }
+
+    function closeLoginModal() {
+      document.getElementById('loginModal').classList.add('hidden');
+      document.getElementById('loginModal').classList.remove('flex');
+    }
+
+    function authenticateDemo(providerName, type) {
+      userState = {
+        isLoggedIn: true,
+        name: `${providerName} Member`,
+        provider: type,
+        balance: '$184.25'
+      };
+      applyUserState();
+      closeLoginModal();
+      showToast(`Signed in successfully with ${providerName}!`, 'success');
+    }
+
+    function handleEmailDemoLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('demoEmailInput').value;
+      const username = email.split('@')[0] || 'Worker';
+      userState = {
+        isLoggedIn: true,
+        name: username.charAt(0).toUpperCase() + username.slice(1),
+        provider: 'Email',
+        balance: '$148.60'
+      };
+      applyUserState();
+      closeLoginModal();
+      showToast(`Welcome back, ${userState.name}!`, 'success');
+    }
+
+    function applyUserState() {
+      const loginBtn = document.getElementById('navLoginBtn');
+      const profileBar = document.getElementById('userProfileBar');
+      const nameEl = document.getElementById('navUserName');
+      const avatarEl = document.getElementById('navUserAvatar');
+      const balanceEl = document.getElementById('navBalance');
+
+      if (userState.isLoggedIn) {
+        loginBtn.classList.add('hidden');
+        profileBar.classList.remove('hidden');
+        profileBar.classList.add('flex');
+        nameEl.textContent = userState.name;
+        avatarEl.textContent = userState.name.substring(0, 2).toUpperCase();
+        balanceEl.textContent = userState.balance;
+      } else {
+        loginBtn.classList.remove('hidden');
+        profileBar.classList.add('hidden');
+        profileBar.classList.remove('flex');
+      }
+    }
+
+    function handleLogout() {
+      userState.isLoggedIn = false;
+      applyUserState();
+      showToast('Logged out of demo session', 'info');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      const borderColor = type === 'success' ? 'border-emerald-500/40 text-emerald-300' : 'border-indigo-500/40 text-indigo-300';
+      const icon = type === 'success' ? 'check-circle' : 'info';
+
+      toast.className = `bg-slate-900 border ${borderColor} px-4 py-3 rounded-xl shadow-2xl text-xs flex items-center gap-2.5 transform transition-all duration-300 translate-y-3 opacity-0 pointer-events-auto`;
+      toast.innerHTML = `
+        <i data-lucide="${icon}" class="w-4 h-4"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-3', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Initialize application
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCategoryPills();
+      renderCards();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
